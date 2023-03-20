@@ -13,9 +13,16 @@
         </template>
         <div class="panel-MdEditor">
             <div class="default-theme">
-                <h2 class="inline-block">{{ $t('setting.newVersion') }}</h2>
-                <el-tag class="inline-block tag">{{ upgradeInfo.newVersion }}</el-tag>
+                <h2 class="inline-block">{{ $t('app.version') }}</h2>
             </div>
+            <el-radio-group class="inline-block tag" v-model="upgradeVersion">
+                <el-radio :label="upgradeInfo.latestVersion">
+                    {{ upgradeInfo.latestVersion }} {{ $t('setting.latestVersion') }}
+                </el-radio>
+                <el-radio v-if="upgradeInfo.newVersion" :label="upgradeInfo.newVersion">
+                    {{ upgradeInfo.newVersion }} {{ $t('setting.newVersion') }}
+                </el-radio>
+            </el-radio-group>
             <MdEditor v-model="upgradeInfo.releaseNote" previewOnly />
         </div>
         <template #footer>
@@ -34,6 +41,7 @@ import 'md-editor-v3/lib/style.css';
 import { MsgSuccess } from '@/utils/message';
 import { onMounted, ref } from 'vue';
 import { GlobalStore } from '@/store';
+import { ElMessageBox } from 'element-plus';
 const globalStore = GlobalStore();
 
 const version = ref();
@@ -41,6 +49,8 @@ let loading = ref(false);
 const drawerVisiable = ref(false);
 const upgradeInfo = ref();
 const refresh = ref();
+
+const upgradeVersion = ref();
 
 const search = async () => {
     const res = await getSettingInfo();
@@ -56,12 +66,12 @@ const onLoadUpgradeInfo = async () => {
     await loadUpgradeInfo()
         .then((res) => {
             loading.value = false;
-
             if (!res.data) {
                 MsgSuccess(i18n.global.t('setting.noUpgrade'));
                 return;
             }
             upgradeInfo.value = res.data;
+            upgradeVersion.value = upgradeInfo.value.latestVersion;
             drawerVisiable.value = true;
         })
         .catch(() => {
@@ -99,7 +109,6 @@ onMounted(() => {
     height: calc(100vh - 330px);
     margin-left: 70px;
     .tag {
-        margin-left: 20px;
         margin-top: -6px;
         vertical-align: middle;
     }
