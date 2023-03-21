@@ -22,6 +22,7 @@ type UpgradeService struct{}
 
 type IUpgradeService interface {
 	Upgrade(req dto.Upgrade) error
+	LoadNotes(req dto.Upgrade) (string, error)
 	SearchUpgrade() (*dto.UpgradeInfo, error)
 }
 
@@ -65,6 +66,14 @@ func (u *UpgradeService) SearchUpgrade() (*dto.UpgradeInfo, error) {
 	}
 	upgrade.ReleaseNote = notes
 	return &upgrade, nil
+}
+
+func (u *UpgradeService) LoadNotes(req dto.Upgrade) (string, error) {
+	notes, err := u.loadReleaseNotes(fmt.Sprintf("%s/%s/%s/release/1panel-%s-release-notes", global.CONF.System.RepoUrl, global.CONF.System.Mode, req.Version, req.Version))
+	if err != nil {
+		return "", fmt.Errorf("load relase-notes of version %s failed, err: %v", req.Version, err)
+	}
+	return notes, nil
 }
 
 func (u *UpgradeService) Upgrade(req dto.Upgrade) error {

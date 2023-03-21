@@ -15,13 +15,19 @@
             <div class="default-theme">
                 <h2 class="inline-block">{{ $t('app.version') }}</h2>
             </div>
-            <el-radio-group class="inline-block tag" v-model="upgradeVersion">
-                <el-radio :label="upgradeInfo.latestVersion">
-                    {{ upgradeInfo.latestVersion }} {{ $t('setting.latestVersion') }}
-                </el-radio>
+            <el-radio-group class="inline-block tag" v-model="upgradeVersion" @change="changeOption">
                 <el-radio v-if="upgradeInfo.newVersion" :label="upgradeInfo.newVersion">
                     {{ upgradeInfo.newVersion }} {{ $t('setting.newVersion') }}
                 </el-radio>
+                <el-radio :label="upgradeInfo.latestVersion">
+                    {{ upgradeInfo.latestVersion }} {{ $t('setting.latestVersion') }}
+                </el-radio>
+                <span v-if="upgradeVersion === upgradeInfo.newVersion" class="input-help">
+                    {{ $t('setting.newVersionHelper', [version.substring(0, 4)]) }}
+                </span>
+                <span v-if="upgradeVersion === upgradeInfo.latestVersion" class="input-help">
+                    {{ $t('setting.latestVersionHelper') }}
+                </span>
             </el-radio-group>
             <MdEditor v-model="upgradeInfo.releaseNote" previewOnly />
         </div>
@@ -34,7 +40,7 @@
     </el-drawer>
 </template>
 <script setup lang="ts">
-import { getSettingInfo, loadUpgradeInfo, upgrade } from '@/api/modules/setting';
+import { getSettingInfo, loadReleaseNotes, loadUpgradeInfo, upgrade } from '@/api/modules/setting';
 import MdEditor from 'md-editor-v3';
 import i18n from '@/lang';
 import 'md-editor-v3/lib/style.css';
@@ -71,12 +77,17 @@ const onLoadUpgradeInfo = async () => {
                 return;
             }
             upgradeInfo.value = res.data;
-            upgradeVersion.value = upgradeInfo.value.latestVersion;
+            upgradeVersion.value = upgradeInfo.value.newVersion || upgradeInfo.value.latestVersion;
             drawerVisiable.value = true;
         })
         .catch(() => {
             loading.value = false;
         });
+};
+
+const changeOption = async () => {
+    const res = await loadReleaseNotes(upgradeVersion.value);
+    upgradeInfo.value.releaseNote = res.data;
 };
 
 const onUpgrade = async () => {
@@ -86,7 +97,7 @@ const onUpgrade = async () => {
         type: 'info',
     }).then(async () => {
         globalStore.isLoading = true;
-        await upgrade(upgradeInfo.value.newVersion);
+        await upgrade(upgradeVersion.value);
         drawerVisiable.value = false;
         MsgSuccess(i18n.global.t('commons.msg.operationSuccess'));
         search();
