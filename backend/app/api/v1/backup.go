@@ -64,7 +64,7 @@ func (b *BaseApi) RefreshOneDriveToken(c *gin.Context) {
 // @Summary List buckets
 // @Accept json
 // @Param request body dto.ForBuckets true "request"
-// @Success 200 {array} string
+// @Success 200 {array} object
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /settings/backup/search [post]
@@ -140,7 +140,7 @@ func (b *BaseApi) DeleteBackup(c *gin.Context) {
 // @Summary Page backup records
 // @Accept json
 // @Param request body dto.RecordSearch true "request"
-// @Success 200
+// @Success 200 {object} dto.PageResult
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /settings/backup/record/search [post]
@@ -163,10 +163,33 @@ func (b *BaseApi) SearchBackupRecords(c *gin.Context) {
 }
 
 // @Tags Backup Account
+// @Summary Load backup records size
+// @Accept json
+// @Param request body dto.RecordSearch true "request"
+// @Success 200 {array} dto.BackupFile
+// @Security ApiKeyAuth
+// @Security Timestamp
+// @Router /settings/backup/record/size [post]
+func (b *BaseApi) LoadBackupSize(c *gin.Context) {
+	var req dto.RecordSearch
+	if err := helper.CheckBindAndValidate(&req, c); err != nil {
+		return
+	}
+
+	list, err := backupService.LoadSize(req)
+	if err != nil {
+		helper.ErrorWithDetail(c, constant.CodeErrInternalServer, constant.ErrTypeInternalServer, err)
+		return
+	}
+
+	helper.SuccessWithData(c, list)
+}
+
+// @Tags Backup Account
 // @Summary Page backup records by cronjob
 // @Accept json
 // @Param request body dto.RecordSearchByCronjob true "request"
-// @Success 200
+// @Success 200 {object} dto.PageResult
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /settings/backup/record/search/bycronjob [post]
@@ -189,10 +212,33 @@ func (b *BaseApi) SearchBackupRecordsByCronjob(c *gin.Context) {
 }
 
 // @Tags Backup Account
+// @Summary Load backup records size for cronjob
+// @Accept json
+// @Param request body dto.RecordSearchByCronjob true "request"
+// @Success 200 {array} dto.BackupFile
+// @Security ApiKeyAuth
+// @Security Timestamp
+// @Router /settings/backup/record/size/bycronjob [post]
+func (b *BaseApi) LoadBackupSizeByCronjob(c *gin.Context) {
+	var req dto.RecordSearchByCronjob
+	if err := helper.CheckBindAndValidate(&req, c); err != nil {
+		return
+	}
+
+	list, err := backupService.LoadSizeByCronjob(req)
+	if err != nil {
+		helper.ErrorWithDetail(c, constant.CodeErrInternalServer, constant.ErrTypeInternalServer, err)
+		return
+	}
+
+	helper.SuccessWithData(c, list)
+}
+
+// @Tags Backup Account
 // @Summary Download backup record
 // @Accept json
 // @Param request body dto.DownloadRecord true "request"
-// @Success 200
+// @Success 200 {string} filePath
 // @Security ApiKeyAuth
 // @Security Timestamp
 // @Router /settings/backup/record/download [post]

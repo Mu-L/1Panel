@@ -100,15 +100,18 @@ func Init() {
 	_, _ = bundle.LoadMessageFileFS(fs, "lang/zh-Hant.yaml")
 	_, _ = bundle.LoadMessageFileFS(fs, "lang/fa.yaml")
 	_, _ = bundle.LoadMessageFileFS(fs, "lang/pt.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/pt-BR.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ja.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ru.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ms.yaml")
+	_, _ = bundle.LoadMessageFileFS(fs, "lang/ko.yaml")
 }
 
 func UseI18nForCmd(lang string) {
 	if lang == "" {
 		lang = "en"
 	}
-	if lang == "pt-BR" {
-		lang = "pt"
-	}
+
 	if bundle == nil {
 		Init()
 	}

@@ -21,7 +21,7 @@
                                 :type="activeTag === item.key ? 'primary' : ''"
                                 :plain="activeTag !== item.key"
                             >
-                                {{ language == 'zh' || language == 'tw' ? item.name : item.key }}
+                                {{ item.name }}
                             </el-button>
                         </div>
                         <div class="inline">
@@ -630,7 +630,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../index.scss';
+@use '../index';
 @media only screen and (max-width: 1400px) {
     .install-card-col-12 {
         max-width: 100%;

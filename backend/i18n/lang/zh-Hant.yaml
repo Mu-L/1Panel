@@ -12,6 +12,7 @@ ErrApiConfigStatusInvalid: "API 介面禁止訪問: {{ .detail }}"
 ErrApiConfigKeyInvalid: "API 介面金鑰錯誤: {{ .detail }}"
 ErrApiConfigIPInvalid: "呼叫 API 介面 IP 不在白名單: {{ .detail }}"
 ErrApiConfigDisable: "此介面禁止使用 API 介面呼叫: {{ .detail }}"
+ErrApiConfigKeyTimeInvalid: "API 介面時間戳記錯誤: {{ .detail }}"
 
 #common
 ErrNameIsExist: "名稱已存在"
@@ -75,7 +76,7 @@ UpgradeAppSuccess: "應用程式 {{ .name }} 升級成功"
 
 #file
 ErrFileCanNotRead: "此文件不支援預覽"
-ErrFileToLarge: "文件超過10M,無法打開"
+ErrFileToLarge: "文件超過10M，無法打開"
 ErrPathNotFound: "目錄不存在"
 ErrMovePathFailed: "目標路徑不能包含原路徑！"
 ErrLinkPathNotFound: "目標路徑不存在!"
@@ -90,7 +91,7 @@ ErrPathNotDelete: "所選目錄不可刪除"
 #website
 ErrDomainIsExist: "域名已存在"
 ErrAliasIsExist: "代號已存在"
-ErrAppDelete: '其他網站使用此應用,無法刪除'
+ErrAppDelete: '其他網站使用此應用，無法刪除'
 ErrGroupIsUsed: '分組正在使用中，無法刪除'
 ErrBackupMatch: '該備份文件與目前網站部分數據不匹配: {{ .detail}}'
 ErrBackupExist: '該備份文件對應部分原數據不存在: {{ .detail}}'
@@ -112,11 +113,11 @@ ErrSSLKeyFormat: '私鑰文件校驗錯誤'
 ErrSSLCertificateFormat: '證書文件格式錯誤，請使用 pem 格式'
 ErrEabKidOrEabHmacKeyCannotBlank: 'EabKid 或 EabHmacKey 不能為空'
 ErrOpenrestyNotFound: 'Http 模式需要先安裝 Openresty'
-ApplySSLStart: '開始申請憑證,網域 [{{ .domain }}] 申請方式 [{{ .type }}] '
+ApplySSLStart: '開始申請憑證，網域 [{{ .domain }}] 申請方式 [{{ .type }}] '
 dnsAccount: "DNS 自動"
 dnsManual: "DNS 手排"
 http: "HTTP"
-ApplySSLFailed: '申請 [{{ .domain }}] 憑證失敗, {{.detail}} '
+ApplySSLFailed: '申請 [{{ .domain }}] 憑證失敗， {{.detail}} '
 ApplySSLSuccess: '申請 [{{ .domain }}] 憑證成功！ ！ '
 DNSAccountName: 'DNS 帳號 [{{ .name }}] 廠商 [{{.type}}]'
 PushDirLog: '憑證推送到目錄 [{{ .path }}] {{ .status }}'
@@ -145,6 +146,7 @@ ErrTypeOfRedis: "恢復文件類型與目前持久化方式不匹配，請修改
 #container
 ErrInUsed: "{{ .detail }} 正被使用，無法刪除"
 ErrObjectInUsed: "該對象正被使用，無法刪除"
+ErrObjectBeDependent: "該鏡像依賴於其他鏡像，無法刪除"
 ErrPortRules: "埠數目不匹配，請重新輸入！"
 ErrPgImagePull: "鏡像拉取超時，請配置鏡像加速或手動拉取 postgres:16.0-alpine 鏡像後重試"
 
@@ -203,7 +205,8 @@ ErrIPExist: "IP 已存在"
 #license
 ErrLicense: "許可證格式錯誤，請檢查後重試！"
 ErrLicenseCheck: "許可證校驗失敗，請檢查後重試！"
-ErrLicenseSave: "許可證資訊保存失敗，錯誤 {{ .err }}, 請重試！"
+ErrXpackVersion: "許可證校驗失敗，該許可證受版本限制，無法成功導入，請檢查後重試！"
+ErrLicenseSave: "許可證資訊保存失敗，錯誤 {{ .err }}， 請重試！"
 ErrLicenseSync: "許可證資訊同步失敗，資料庫中未檢測到許可證資訊！"
 ErrXpackNotFound: "該部分為專業版功能，請先在 面板設定-許可證 界面導入許可證"
 ErrXpackNotActive: "該部分為專業版功能，請先在 面板設定-許可證 界面同步許可證狀態"

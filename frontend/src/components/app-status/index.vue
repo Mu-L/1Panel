@@ -187,31 +187,26 @@ const clear = () => {
 };
 
 const onOperate = async (operation: string) => {
-    em('update:maskShow', false);
     operateReq.operate = operation;
     ElMessageBox.confirm(i18n.global.t(`app.${operation}OperatorHelper`), i18n.global.t('app.' + operation), {
         confirmButtonText: i18n.global.t('commons.button.confirm'),
         cancelButtonText: i18n.global.t('commons.button.cancel'),
         type: 'info',
-    })
-        .then(() => {
-            em('update:maskShow', true);
-            em('update:loading', true);
-            em('before');
-            InstalledOp(operateReq)
-                .then(() => {
-                    em('update:loading', false);
-                    MsgSuccess(i18n.global.t('commons.msg.operationSuccess'));
-                    onCheck(key.value, name.value);
-                    em('after');
-                })
-                .catch(() => {
-                    em('update:loading', false);
-                });
-        })
-        .catch(() => {
-            em('update:maskShow', true);
-        });
+    }).then(() => {
+        em('update:maskShow', true);
+        em('update:loading', true);
+        em('before');
+        InstalledOp(operateReq)
+            .then(() => {
+                em('update:loading', false);
+                MsgSuccess(i18n.global.t('commons.msg.operationSuccess'));
+                onCheck(key.value, name.value);
+                em('after');
+            })
+            .catch(() => {
+                em('update:loading', false);
+            });
+    });
 };
 
 const getTitle = (key: string) => {
@@ -243,6 +238,6 @@ defineExpose({
     border: 1px solid var(--el-color-warning);
     background-color: transparent;
     padding: 8px 8px;
-    width: 78px;
+    max-width: 100px;
 }
 </style>

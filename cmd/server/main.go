@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	_ "net/http/pprof"
+
 	"github.com/1Panel-dev/1Panel/cmd/server/cmd"
 	_ "github.com/1Panel-dev/1Panel/cmd/server/docs"
-	_ "net/http/pprof"
 )
 
 // @title 1Panel
@@ -22,13 +23,13 @@ import (
 // @description Custom Token Format, Format: md5('1panel' + API-Key + UnixTimestamp).
 // @description ```
 // @description eg:
-// @description curl -X GET "http://localhost:4004/api/v1/resource" \
+// @description curl -X GET "http://localhost:4004/api/v1/dashboard/current" \
 // @description -H "1Panel-Token: <1panel_token>" \
 // @description -H "1Panel-Timestamp: <current_unix_timestamp>"
 // @description ```
 // @description - `1Panel-Token` is the key for the panel API Key.
 // @type apiKey
-// @in Header
+// @in header
 // @name 1Panel-Token
 
 // @securityDefinitions.apikey Timestamp
